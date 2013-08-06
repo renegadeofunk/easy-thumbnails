@@ -262,8 +262,14 @@ def thumbnail_url(source, alias):
         return ''
     return thumb.url
 
+def thumbnail_url_by_key(dictionary, key):
+    if key in dictionary:
+        return dictionary.get(key).url
+    else:
+        raise KeyError('Invalid thumbnail key')
 
 register.tag(thumbnail)
 register.filter(thumbnailer)
 register.filter(thumbnailer_passive)
 register.filter(thumbnail_url)
+register.filter(thumbnail_url_by_key)
