@@ -5,6 +5,7 @@ from django.core.files.base import File, ContentFile
 from django.core.files.storage import (
     get_storage_class, default_storage, Storage)
 from django.db.models.fields.files import ImageFieldFile, FieldFile
+from django.db.models.query import QuerySet
 
 from django.utils.safestring import mark_safe
 from django.utils.html import escape
@@ -13,13 +14,20 @@ from easy_thumbnails import engine, exceptions, models, utils, signals
 from easy_thumbnails.alias import aliases
 from easy_thumbnails.conf import settings
 
-def get_bulk_thumbnail_urls(objects, field_name, size):
+def get_thumbnails_from_queryset(objects, field_name, size):
     
     # Store thumbnail urls in a dictionary with the table key as the key
     thumbnail_dict = {}
     
-    for obj in objects:
-        thumbnail_dict[obj.id] = get_thumbnailer(getattr(obj, field_name)).get_thumbnail({'size': size}).url
+    # QuerySets can be turned into lists in some cases
+    if isinstance(objects, QuerySet) or isinstance(objects, list):
+        try:
+            for obj in objects:
+                thumbnail_dict[obj.id] = get_thumbnailer(getattr(obj, field_name)).get_thumbnail({'size': size}).url
+        except AttributeError:
+            raise AttributeError('Incorrect field name to select from')
+    else:
+        raise TypeError("Please provide a QuerySet or list")
         
     return thumbnail_dict
 
