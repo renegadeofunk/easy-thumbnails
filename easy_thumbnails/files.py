@@ -13,6 +13,15 @@ from easy_thumbnails import engine, exceptions, models, utils, signals
 from easy_thumbnails.alias import aliases
 from easy_thumbnails.conf import settings
 
+def get_bulk_thumbnail_urls(objects, field_name, size):
+    
+    # Store thumbnail urls in a dictionary with the table key as the key
+    thumbnail_dict = {}
+    
+    for obj in objects:
+        thumbnail_dict[obj.id] = get_thumbnailer(getattr(obj, field_name)).get_thumbnail({'size': size}).url
+        
+    return thumbnail_dict
 
 def get_thumbnailer(obj, relative_name=None):
     """
