@@ -15,6 +15,21 @@ from easy_thumbnails.alias import aliases
 from easy_thumbnails.conf import settings
 
 def get_thumbnails_from_queryset(objects, field_name, size):
+    """ 
+    Create a bulk listing of thumbnails for a given list of objects.
+    
+    The ``objects`` argument is a QuerySet or list which contains the images you want converted to
+    thumbnails
+    
+    The ``field_name`` argument denotes which field to select for thumbnailization
+    
+    The ``size`` argument is for the requested thumbnail size
+    
+    Example usage::
+        
+        thumbnails = get_thumbnails_from_queryset(items, 'image1', (300, 300),)
+    
+    """
     
     # Store thumbnail urls in a dictionary with the table key as the key
     thumbnail_dict = {}
