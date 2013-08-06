@@ -34,11 +34,8 @@ def get_thumbnails_from_queryset(objects, field_name, thumbnail_options, relativ
     thumbnail_dict = {} # Store thumbnail urls in a dictionary with the table key as the key
     
     if isinstance(objects, QuerySet) or isinstance(objects, list): # QuerySets can be turned into lists in some cases
-        try:
-            for obj in objects:
-                thumbnail_dict[obj.id] = get_thumbnailer(getattr(obj, field_name), relative_name).get_thumbnail(thumbnail_options)
-        except AttributeError:
-            raise AttributeError('The given image field was not found')
+        for obj in objects:
+            thumbnail_dict[obj.id] = get_thumbnailer(getattr(obj, field_name), relative_name).get_thumbnail(thumbnail_options)
     else:
         raise TypeError("Please provide a QuerySet or list of objects")
         
