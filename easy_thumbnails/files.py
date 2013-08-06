@@ -101,7 +101,7 @@ def generate_all_aliases(fieldfile, include_global):
             thumbnailer.get_thumbnail(options)
 
 
-def get_thumbnails_from_queryset(objects, field_name, thumbnail_options, relative_name=None):
+def get_thumbnails_from_queryset(objects, field_name, thumbnail_options, relative_name=None, save=True, generate=None):
     """Create a bulk listing of thumbnails for a given list of objects.
     
     The ``objects`` argument is a QuerySet or list which contains the images you want converted to
@@ -122,7 +122,7 @@ def get_thumbnails_from_queryset(objects, field_name, thumbnail_options, relativ
     
     if isinstance(objects, QuerySet) or isinstance(objects, list): # QuerySets can be turned into lists in some cases
         for obj in objects:
-            thumbnail_dict[obj.id] = get_thumbnailer(getattr(obj, field_name), relative_name).get_thumbnail(thumbnail_options)
+            thumbnail_dict[obj.id] = get_thumbnailer(getattr(obj, field_name), relative_name).get_thumbnail(thumbnail_options, save, generate)
     else:
         raise TypeError("Please provide a QuerySet or list of objects")
         
