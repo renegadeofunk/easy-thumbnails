@@ -36,9 +36,9 @@ def get_thumbnails_from_queryset(objects, field_name, size):
             for obj in objects:
                 thumbnail_dict[obj.id] = get_thumbnailer(getattr(obj, field_name)).get_thumbnail({'size': size})
         except AttributeError:
-            raise AttributeError('Incorrect field name to select from')
+            raise AttributeError('No image attribute found')
     else:
-        raise TypeError("Please provide a QuerySet or list")
+        raise TypeError("Please provide a QuerySet or list of objects")
         
     return thumbnail_dict
 
