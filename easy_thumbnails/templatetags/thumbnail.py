@@ -263,6 +263,15 @@ def thumbnail_url(source, alias):
     return thumb.url
 
 def thumbnail_url_by_key(dictionary, key):
+    """Return the thumbnail url for a specified key from a bulk thumbnail dict
+    
+    The dictionary is probably returned from ``files.get_thumbnails_from_queryset()``
+    
+    Example usage::
+        
+        {{ thumbnails|get_thumbnail_by_key:obj.id }}
+    
+    """
     if key in dictionary:
         return dictionary.get(key).url
     else:
