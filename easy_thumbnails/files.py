@@ -14,19 +14,21 @@ from easy_thumbnails import engine, exceptions, models, utils, signals
 from easy_thumbnails.alias import aliases
 from easy_thumbnails.conf import settings
 
-def get_thumbnails_from_queryset(objects, field_name, size):
+def get_thumbnails_from_queryset(objects, field_name, thumbnail_options, relative_name=None):
     """Create a bulk listing of thumbnails for a given list of objects.
     
     The ``objects`` argument is a QuerySet or list which contains the images you want converted to
     thumbnails
     
-    The ``field_name`` argument denotes which field to select for thumbnailization
+    The ``field_name`` argument denotes which image field to select for thumbnailization
     
-    The ``size`` argument is for the requested thumbnail size
+    The ``thumbnail_options`` argument is passed through to get_thumbnail()
+    
+    The ``relative_name`` argument is passed through to get_thumbnailer()
     
     Example usage::
         
-        thumbnails = get_thumbnails_from_queryset(items, 'image1', (300, 300),)
+        thumbnails = get_thumbnails_from_queryset(items, 'image1', {'size':(300, 300)},)
     
     """
     thumbnail_dict = {} # Store thumbnail urls in a dictionary with the table key as the key
@@ -34,7 +36,7 @@ def get_thumbnails_from_queryset(objects, field_name, size):
     if isinstance(objects, QuerySet) or isinstance(objects, list): # QuerySets can be turned into lists in some cases
         try:
             for obj in objects:
-                thumbnail_dict[obj.id] = get_thumbnailer(getattr(obj, field_name)).get_thumbnail({'size': size})
+                thumbnail_dict[obj.id] = get_thumbnailer(getattr(obj, field_name), relative_name).get_thumbnail(thumbnail_options)
         except AttributeError:
             raise AttributeError('The given image field was not found')
     else:
