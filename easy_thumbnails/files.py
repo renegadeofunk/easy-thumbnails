@@ -15,8 +15,7 @@ from easy_thumbnails.alias import aliases
 from easy_thumbnails.conf import settings
 
 def get_thumbnails_from_queryset(objects, field_name, size):
-    """ 
-    Create a bulk listing of thumbnails for a given list of objects.
+    """Create a bulk listing of thumbnails for a given list of objects.
     
     The ``objects`` argument is a QuerySet or list which contains the images you want converted to
     thumbnails
@@ -30,15 +29,12 @@ def get_thumbnails_from_queryset(objects, field_name, size):
         thumbnails = get_thumbnails_from_queryset(items, 'image1', (300, 300),)
     
     """
+    thumbnail_dict = {} # Store thumbnail urls in a dictionary with the table key as the key
     
-    # Store thumbnail urls in a dictionary with the table key as the key
-    thumbnail_dict = {}
-    
-    # QuerySets can be turned into lists in some cases
-    if isinstance(objects, QuerySet) or isinstance(objects, list):
+    if isinstance(objects, QuerySet) or isinstance(objects, list): # QuerySets can be turned into lists in some cases
         try:
             for obj in objects:
-                thumbnail_dict[obj.id] = get_thumbnailer(getattr(obj, field_name)).get_thumbnail({'size': size}).url
+                thumbnail_dict[obj.id] = get_thumbnailer(getattr(obj, field_name)).get_thumbnail({'size': size})
         except AttributeError:
             raise AttributeError('Incorrect field name to select from')
     else:
